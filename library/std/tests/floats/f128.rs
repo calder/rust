@@ -989,9 +989,17 @@ fn test_algebraic() {
     let a: f128 = 123.0;
     let b: f128 = 456.0;
 
-    assert_approx_eq!(a.algebraic_add(b), a + b);
-    assert_approx_eq!(a.algebraic_sub(b), a - b);
-    assert_approx_eq!(a.algebraic_mul(b), a * b);
-    assert_approx_eq!(a.algebraic_div(b), a / b);
-    assert_approx_eq!(a.algebraic_rem(b), a % b);
+    if cfg!(miri) {
+        assert_approx_eq!(a.algebraic_add(b), a + b);
+        assert_approx_eq!(a.algebraic_sub(b), a - b);
+        assert_approx_eq!(a.algebraic_mul(b), a * b);
+        assert_approx_eq!(a.algebraic_div(b), a / b);
+        assert_approx_eq!(a.algebraic_rem(b), a % b);
+    } else {
+        assert_eq!(a.algebraic_add(b), a + b);
+        assert_eq!(a.algebraic_sub(b), a - b);
+        assert_eq!(a.algebraic_mul(b), a * b);
+        assert_eq!(a.algebraic_div(b), a / b);
+        assert_eq!(a.algebraic_rem(b), a % b);
+    }
 }
